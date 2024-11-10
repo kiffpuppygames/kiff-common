@@ -16,7 +16,7 @@
             "name": "Debug Tests",
             "type": "cppvsdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/zig-out/bin/kiff-engine-debug-tests.exe",
+            "program": "${workspaceFolder}/zig-out/bin/common-tests.exe",
             "args": [],
             "cwd": "${workspaceFolder}",
             "preLaunchTask": "build tests",

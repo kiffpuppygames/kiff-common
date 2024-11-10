@@ -26,7 +26,7 @@
             "command": "zig",
             "args": [
                 "build",
-                "build_tests",
+                "test",
                 "-Doptimize=Debug",
                 "-freference-trace",     
             ],
