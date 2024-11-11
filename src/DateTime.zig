@@ -1,6 +1,6 @@
 const std = @import("std");
 
-const string_formatting = @import("../string_formatting.zig");
+const string_formatting = @import("string_formatting.zig");
 
 const DateTime = @This();
 

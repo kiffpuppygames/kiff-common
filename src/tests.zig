@@ -1,11 +1,14 @@
 const std = @import("std");
 
+const Logger = @import("logging.zig").Logger;
 const DateTime = @import("DateTime.zig");
 
-test "simple test" 
+test "log test" 
 {
-    var list = std.ArrayList(i32).init(std.testing.allocator);
-    defer list.deinit(); // Try commenting this out and see if zig detects the memory leak!
-    try list.append(42);
-    try std.testing.expectEqual(@as(i32, 42), list.pop());
+    const logger = try Logger.new();
+
+    logger.info("Hello, world!", .{});
+    logger.debug("Hello, world!", .{});
+    logger.warn("Hello, world!", .{});
+    logger.err("Hello, world!", .{});
 }
