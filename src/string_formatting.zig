@@ -18,3 +18,10 @@ pub inline fn toNullTerminated(alloc: std.mem.Allocator, str: []const u8) [*:0]c
 {
     return std.fmt.allocPrintZ(alloc, "{s}", .{str}) catch unreachable;
 }
+
+pub inline fn string_arr_to_slice(text: [256]u8) []const u8
+{
+    const text_ptr = @as([]u8, @constCast(&text));
+    const text_len = std.mem.indexOfScalar(u8, text_ptr, 0);
+    return text_ptr[0..text_len.?];
+}
