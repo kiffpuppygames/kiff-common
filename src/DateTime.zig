@@ -51,10 +51,10 @@ pub fn fromTimestamp(time_stamp: u64) DateTime {
         false => DAYS_PER_MONTH,
     };
 
-    var month: u8 = 1;
-    while (days > days_per_month[month]) {
-        days = days - days_per_month[month];
-        month = month + 1;
+    var month_index: u8 = 0;
+    while (days > days_per_month[month_index]) {
+        days = days - days_per_month[month_index];
+        month_index = month_index + 1;
     }
 
     const millis_since_midnight: u64 = @rem(time_stamp, MILLIS_PER_DAY);
@@ -70,7 +70,7 @@ pub fn fromTimestamp(time_stamp: u64) DateTime {
 
     return DateTime{
         .year = current_year,
-        .month = month,
+        .month = month_index + 1,
         .day = @intCast(days + 1),
         .hour = hours,
         .minute = minutes,
