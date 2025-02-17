@@ -3,13 +3,12 @@
     "configurations": [        
         {
             "name": "Debug",
-            "type": "cppvsdbg",
+            "type": "lldb",
             "request": "launch",
             "program": "${workspaceFolder}/zig-out/bin/common-tests.exe",
             "args": [],
             "cwd": "${workspaceFolder}",
             "preLaunchTask": "build",
-            "stopAtEntry": false,
         },
     ]
 }
