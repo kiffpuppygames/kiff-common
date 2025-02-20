@@ -34,13 +34,13 @@ pub const Logger = struct
         };
     }
 
-    pub fn warn(self: *const Logger, comptime msg: []const u8, args: anytype) void 
+    pub fn warn(comptime msg: []const u8, args: anytype) void 
     {
         const date_time = DateTime.getNowString(allocator.allocator());
         defer allocator.allocator().free(date_time);
-        const formatted_msg = self.formatMsg(msg, args);
+        const formatted_msg = formatMsg(msg, args);
         defer allocator.allocator().free(formatted_msg);
-        const final_msg = self.formatMsg("\x1b[33m[WARN]\x1b[0m  {s} : {s}", .{ date_time, formatted_msg });
+        const final_msg = formatMsg("\x1b[33m[WARN]\x1b[0m  {s} : {s}", .{ date_time, formatted_msg });
         std.io.getStdOut().writer().print("{s}\n", .{final_msg}) catch |e| 
         { 
             std.debug.panic("Failed to format message: {?}", .{e});
