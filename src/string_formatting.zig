@@ -1,17 +1,24 @@
 const std = @import("std");
 
-pub inline fn padString(allocator: std.mem.Allocator, str: []u8, pad_amount: u8, pad_char: *const [1:0]u8) []u8 
+const Logger = @import("logging.zig").Logger;
+
+pub inline fn padString(value: anytype, comptime padded_size: usize, comptime pad_char: u8) ![]u8 
 {
-    const chars_to_add: u8 = @intCast(pad_amount - str.len);
+    // TODO: make this configurable
+    var buf: [10]u8 = undefined;
 
-    var pad_str = allocator.alloc(u8, chars_to_add) catch unreachable;
+    const string = try std.fmt.bufPrint(&buf, "{}", . { value });
 
-    for (0..pad_str.len) |i| {
-        pad_str[i] = pad_char[0];
+    const number_of_chars_to_add = padded_size - string.len;
+    var pad_buffer = [_]u8 { pad_char } ** padded_size;
+
+    if (number_of_chars_to_add == 0)
+    {
+        return string;
     }
 
-    const final_str = std.fmt.allocPrint(allocator, "{s}{s}", .{ pad_str, str }) catch unreachable;
-    return final_str;
+    std.mem.copyBackwards(u8, pad_buffer[number_of_chars_to_add..], string);
+    return &pad_buffer;
 }
 
 pub inline fn toNullTerminated(alloc: std.mem.Allocator, str: []const u8) [*:0]const u8 

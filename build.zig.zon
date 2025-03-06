@@ -1,6 +1,7 @@
 .{
-    .name = "kiff-common",
+    .name = .kiff_common,
     .version = "0.0.0",
+    .fingerprint = 0x8dce96941812d21a,
     .dependencies = .{ },
     .paths = .{
         "build.zig",

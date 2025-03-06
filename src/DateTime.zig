@@ -16,9 +16,9 @@ pub fn getNow() DateTime {
     return fromTimestamp(@intCast(std.time.milliTimestamp()));
 }
 
-pub fn getNowString(allocator: std.mem.Allocator) []u8 {
+pub fn getNowString() ![]u8 {
     const dt = fromTimestamp(@intCast(std.time.milliTimestamp()));
-    return toString(dt, allocator);
+    return toString(dt);
 }
 
 pub fn fromTimestamp(time_stamp: u64) DateTime {
@@ -79,57 +79,19 @@ pub fn fromTimestamp(time_stamp: u64) DateTime {
     };
 }
 
-fn toString(dt: DateTime, allocator: std.mem.Allocator) []u8 {
-    const year_str = string_formatting.padString(
-        allocator,
-        std.fmt.allocPrint(allocator, "{d}", .{dt.year}) catch unreachable,
-        4,
-        "0",
-    );
+pub inline fn toString(self: *const DateTime) ![]u8 
+{
+    const year_str = try string_formatting.padString(self.year, 4, '0');
+    const month_str = try string_formatting.padString(self.month, 2, '0');
+    const day_str = try string_formatting.padString(self.day, 2, '0');
+    const hour_str = try string_formatting.padString(self.hour, 2, '0');
+    const min_str = try string_formatting.padString(self.minute, 2, '0');
+    const sec_str = try string_formatting.padString(self.second, 2, '0');
+    const mil_str = try string_formatting.padString(self.millis, 3, '0');
 
-    const month_str = string_formatting.padString(
-        allocator,
-        std.fmt.allocPrint(allocator, "{d}", .{dt.month}) catch unreachable,
-        2,
-        "0",
-    );
+    var date_buf: [4 + (2 * 5) + 3 + 6]u8 = undefined;
 
-    const day_str = string_formatting.padString(
-        allocator,
-        std.fmt.allocPrint(allocator, "{d}", .{dt.day}) catch unreachable,
-        2,
-        "0",
-    );
-
-    const hour_str = string_formatting.padString(
-        allocator,
-        std.fmt.allocPrint(allocator, "{d}", .{dt.hour}) catch unreachable,
-        2,
-        "0",
-    );
-
-    const min_str = string_formatting.padString(
-        allocator,
-        std.fmt.allocPrint(allocator, "{d}", .{dt.minute}) catch unreachable,
-        2,
-        "0",
-    );
-
-    const sec_str = string_formatting.padString(
-        allocator,
-        std.fmt.allocPrint(allocator, "{d}", .{dt.second}) catch unreachable,
-        2,
-        "0",
-    );
-
-    const mil_str = string_formatting.padString(
-        allocator,
-        std.fmt.allocPrint(allocator, "{d}", .{dt.millis}) catch unreachable,
-        3,
-        "0",
-    );
-
-    const date_str = std.fmt.allocPrint(allocator, "{s}/{s}/{s} {s}:{s}:{s}:{s}", .{
+    _ = try std.fmt.bufPrint(&date_buf, "{s}/{s}/{s} {s}:{s}:{s}:{s}", .{
         day_str,
         month_str,
         year_str,
@@ -137,9 +99,9 @@ fn toString(dt: DateTime, allocator: std.mem.Allocator) []u8 {
         min_str,
         sec_str,
         mil_str,
-    }) catch unreachable;
+    });
 
-    return date_str;
+    return date_buf[0..];
 }
 
 inline fn isLeapYear(year: u16) bool {
