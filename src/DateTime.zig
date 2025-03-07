@@ -18,7 +18,7 @@ pub fn getNow() DateTime {
 
 pub fn getNowString() ![]u8 {
     const dt = fromTimestamp(@intCast(std.time.milliTimestamp()));
-    return toString(dt);
+    return toString(&dt);
 }
 
 pub fn fromTimestamp(time_stamp: u64) DateTime {
