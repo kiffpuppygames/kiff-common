@@ -38,22 +38,6 @@ pub fn deinit(self: *StringUnmanaged, allocator: std.mem.Allocator) void {
     self.chars.deinit(allocator);
 }
 
-pub fn main() !void
-{
-    var gpa = std.heap.GeneralPurposeAllocator(.{}).init;
-    defer {
-        if (gpa.deinit() == .leak) {
-            std.log.debug("LEAK!!", .{});
-        }
-    }
-
-    var str = try StringUnmanaged.build(gpa.allocator(), "Hello ¬ ¬", . { "Guy", "Lemmer" } );
-    defer str.deinit(gpa.allocator());
-
-    std.log.debug("{s}", .{ str.chars.items });
-    std.log.debug("{any}", .{ str.chars.items });
-}
-
 test "build string" 
 {
     var gpa = std.heap.GeneralPurposeAllocator(.{}).init;
