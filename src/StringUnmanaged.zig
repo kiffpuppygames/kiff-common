@@ -25,7 +25,6 @@ pub fn build(allocator: std.mem.Allocator, fmt: []const u8, args: anytype ) !Str
     {
         const val = @field(args, arg.name);        
         const start_index = std.mem.indexOf(u8, string.chars.items, string.insert_point).?;
-        std.log.debug("{d}", .{ start_index });        
         string.chars.items[start_index] = val[0];
         try string.chars.insertSlice(allocator, start_index + 1, val[1..]);
         _ = string.chars.orderedRemove(start_index + val.len);
