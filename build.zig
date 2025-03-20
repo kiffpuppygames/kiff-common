@@ -4,6 +4,16 @@ pub fn build(b: *std.Build) void {
     const target = b.standardTargetOptions(.{});
     const optimize = b.standardOptimizeOption(.{});
 
+    const lib = b.addStaticLibrary(.{
+         .name = "kiff_common",
+         .root_source_file = b.path("src/root.zig"),
+         .target = target,
+         .optimize = optimize,
+     });
+     lib.root_module.addImport("kiff_common", b.addModule("kiff_common", .{ .root_source_file = b.path("src/root.zig") } ));
+     b.installArtifact(lib);
+
+
     const lib_mod = b.createModule(.{
         .root_source_file = b.path("src/root.zig"),
         .target = target,
@@ -16,13 +26,6 @@ pub fn build(b: *std.Build) void {
         .optimize = optimize,
     });
     exe_mod.addImport("kiff_common", lib_mod);
-
-    const lib = b.addLibrary(.{
-        .linkage = .static,
-        .name = "kiff_common",
-        .root_module = lib_mod,
-    });
-    b.installArtifact(lib);
 
     const exe = b.addExecutable(.{
         .name = "kiff_common",
